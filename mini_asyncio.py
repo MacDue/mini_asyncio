@@ -46,6 +46,8 @@ class Future:
       yield self # pending future
     return self._result
 
+  __await__ = __iter__
+
 
 class Task(Future):
 
@@ -109,7 +111,7 @@ class EventLoop:
       else 0)
 
     # Only sleep when there's no work that can be done now
-    if not len(self._ready_cbs) > 0:
+    if len(self._ready_cbs) <= 0:
       timeout = max(0, timeout)
       time.sleep(timeout)
 

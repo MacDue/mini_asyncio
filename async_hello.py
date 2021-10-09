@@ -18,6 +18,11 @@ async def hello_2():
     print(colored("Yay! 2 Wakup ", 'green'), time.time() - before)
 
 
+async def blocking():
+  print("Hello")
+  await mini_asyncio.sleep(1)
+
+
 async def one_two():
   while True:
     print("A")
@@ -26,6 +31,10 @@ async def one_two():
     await mini_asyncio.sleep(1)
     print("C")
     await mini_asyncio.sleep(1)
+
+    # Create a new task for 'blocking()' and wait for that task to complete
+    # (pointless could directly await -- but a test)
+    await mini_asyncio.get_event_loop().create_task(blocking())
 
 
 if __name__ == '__main__':

@@ -24,6 +24,3 @@ namespace mini_asyncio {
     }
   }
 }
-
-
-

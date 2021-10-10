@@ -23,8 +23,18 @@ auto hello_2() {
   }));
 }
 
+auto blocking() {
+  mini_asyncio::Coro sleep;
+  return make_generator(({
+    std::cout << "Hello\n";
+    sleep = mini_asyncio::sleep(1);
+    yield_from(sleep);
+  }));
+}
+
 auto abc() {
   mini_asyncio::Coro sleep;
+  std::shared_ptr<mini_asyncio::Task> sub_task;
   return make_generator(({
     while (true) {
       std::cout << "A!\n";
@@ -36,6 +46,11 @@ auto abc() {
       std::cout << "C!\n";
       sleep = mini_asyncio::sleep(1);
       yield_from(sleep);
+
+      // Create a new task for 'blocking()' and wait for that task to complete
+      // (pointless could directly await -- but a test)
+      sub_task = mini_asyncio::ensure_future(blocking());
+      yield_from((*sub_task)());
     }
   }));
 }

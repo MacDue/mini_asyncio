@@ -25,6 +25,8 @@ public:
   bool _blocking = false;
   Future(EventLoop& loop): _loop{loop} {}
 
+  virtual ~Future() = default;
+
   void add_done_callback(DoneCallback callback);
 
   void set_done() {
